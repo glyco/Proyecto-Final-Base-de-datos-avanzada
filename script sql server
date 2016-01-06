@@ -1,0 +1,89 @@
+set rowcount 0
+select NULL mykey, * 
+into #mytemp 
+from dbo.Depuracion
+
+create table #TempDep
+(
+	Provincia varchar(50),
+	Distrito varchar(50),
+	TipoEduc varchar(50),
+	Sexo varchar(5),
+	Titulo int	
+)
+
+set rowcount 1
+
+update #mytemp set mykey = 1
+
+while @@rowcount > 0
+begin
+    set rowcount 0
+    DECLARE @Provincia varchar(50),
+			@Distrito varchar(50),
+			@TipoEduc varchar(50),
+			@H_titulo int,
+			@H_Stitulo int,
+			@M_titulo int,
+			@M_Stitulo int
+			
+    select @Provincia = Provincia,
+			@Distrito = Distrito,
+			@TipoEduc = CentroEducativo,
+			@H_titulo =H_Titulo,
+			@H_Stitulo =H_STitulo,
+			@M_titulo =M_Titulo,
+			@M_Stitulo = M_STitulo 
+	from #mytemp 
+	where mykey = 1
+	
+	declare @Contador int
+	Set @Contador = 0 
+	
+	while(@Contador < @H_titulo)
+	BEGIN
+		INSERT INTO #TempDep (Provincia, Distrito, TipoEduc, Sexo, Titulo) 
+		VALUES				 (@Provincia, @Distrito, @TipoEduc, 'H', 1)
+		set @Contador = @Contador + 1
+	END
+	
+	Set @Contador = 0
+	
+	while(@Contador < @H_Stitulo)
+	BEGIN
+		INSERT INTO #TempDep (Provincia, Distrito, TipoEduc, Sexo, Titulo) 
+		VALUES				 (@Provincia, @Distrito, @TipoEduc, 'H', 0)
+		set @Contador = @Contador + 1
+	END
+	
+	Set @Contador = 0
+	
+	while(@Contador < @M_titulo)
+	BEGIN
+		INSERT INTO #TempDep (Provincia, Distrito, TipoEduc, Sexo, Titulo) 
+		VALUES				 (@Provincia, @Distrito, @TipoEduc, 'M', 1)
+		set @Contador = @Contador + 1
+	END
+	
+	Set @Contador = 0
+	
+	while(@Contador < @M_Stitulo)
+	BEGIN
+		INSERT INTO #TempDep (Provincia, Distrito, TipoEduc, Sexo, Titulo) 
+		VALUES				 (@Provincia, @Distrito, @TipoEduc, 'M', 0)
+		set @Contador = @Contador + 1
+	END
+			
+    delete #mytemp where mykey = 1
+    
+    set rowcount 1
+    update #mytemp set mykey = 1
+end
+set rowcount 0
+
+insert into FuenteDatos
+Select * from #TempDep
+
+drop table #mytemp
+drop table #TempDep
+
