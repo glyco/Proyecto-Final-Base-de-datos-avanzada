@@ -1,0 +1,14 @@
+> FuenteDatos <- read.csv("C:/Users/Emilio/Desktop/Final Mineria/FuenteDatos.txt")
+>   View(FuenteDatos)
+> arb_rpart <- rpart(Titulo ~ ., data=FuenteDatos, method="class")
+> plot(arb_rpart)
+> rpart.plot(arb_rpart, type=3, extra=101, fallen.leaves=T)
+Warning messages:
+1: In abbreviate(names, minlen) : abbreviate used with non-ASCII chars
+2: In abbreviate(names, minlen) : abbreviate used with non-ASCII chars
+3: In abbreviate(names, minlen) : abbreviate used with non-ASCII chars
+> arb_rpart2 <- rpart(Titulo ~ Provincia + Sexo + TipoEducacion, data=FuenteDatos, method="class")
+> rpart.plot(arb_rpart2, type=3, extra=101, fallen.leaves=T)
+Warning messages:
+1: In abbreviate(names, minlen) : abbreviate used with non-ASCII chars
+2: In abbreviate(names, minlen) : abbreviate used with non-ASCII chars
